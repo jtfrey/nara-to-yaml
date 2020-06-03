@@ -45,7 +45,7 @@ The state chunk is organized in similar fashion, with each record (of type distr
 +----------------+----------------+-------------- ~ --+
 ```
 
-The structure of the record data varies by record type (see the `nara_district.h`, `nara_school.h`, and `nara_classroom.h` headers).  The first 32-bits of the record data is always the type id, though:
+The structure of the record data varies by record type (see the `nara_district.h`, `nara_school.h`, and `nara_classroom.h` headers, derived from [this PDF](https://catalog.archives.gov/OpaAPI/media/1501570/content/arcmedia/electronic-records/rg-235/esscr/190.1DP.pdf?download=false)).  The first 32-bits of the record data is always the type id, though:
 
 ```
 +--------------------------------+-------------------- ~ --+
