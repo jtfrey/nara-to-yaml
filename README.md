@@ -16,6 +16,7 @@ $ ./nara-to-yaml ~/RG441.ESS.CVRGY70
   systemCounty: "TALLAPOOSA"
   systemState: "ALA"
   systemZipCode: "35010"
+    :
 ```
 
 ## Structure of the code
