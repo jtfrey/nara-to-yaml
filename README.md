@@ -19,6 +19,43 @@ $ ./nara-to-yaml ~/RG441.ESS.CVRGY70
     :
 ```
 
+## On-disk structure
+
+The file format uses EBCDIC character strings of fixed length (right-padded with whitespace) and big-endian binary fields.  At the first level, the file is organized as variable-length chunks containing all records for a state:
+
+```
++----------------+----------------+-------------- ~ --+
+| 16-bit, b.e.   | 16-bit         | State chunk       |
+| = 4 + byte     | = 0 (unused)   |                   |
+|   length of    |                |                   |
+|   chunk        |                |                   |
++----------------+----------------+-------------- ~ --+
+```
+
+The state chunks occur in alphabetical order in the file.
+
+The state chunk is organized in similar fashion, with each record (of type district, school, or classroom) preceded by its size:
+
+```
++----------------+----------------+-------------- ~ --+
+| 16-bit, b.e.   | 16-bit         | Record data       |
+| = 4 + byte     | = 0 (unused)   |                   |
+|   length of    |                |                   |
+|   record       |                |                   |
++----------------+----------------+-------------- ~ --+
+```
+
+The structure of the record data varies by record type (see the `nara_district.h`, `nara_school.h`, and `nara_classroom.h` headers).  The first 32-bits of the record data is always the type id, though:
+
+```
++--------------------------------+-------------------- ~ --+
+| 32-bit, b.e.                   | Additional fields       |
+| record type                    | vary by record          |
+| 1 = district, 2 = school,      | type                    |
+| 3 = classroom                  |                         |
++--------------------------------+-------------------- ~ --+
+```
+
 ## Structure of the code
 
 The on-disk layout of the components of the NARA data archive are presented in header files:
