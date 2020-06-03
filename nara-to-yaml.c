@@ -33,7 +33,8 @@ main(
     
     if ( argc < 2 ) {
         printf( "usage:\n\n"
-                "    %s <nara-file-1> {<nara-file-2> ..}\n\n",
+                "    %s <nara-file-1> {<nara-file-2> ..}\n\n"
+                "      <nara-file-#> should be a path to a NARA archive or a dash (-) to read from stdin\n\n",
                 argv[0]
             );
         exit(EINVAL);
