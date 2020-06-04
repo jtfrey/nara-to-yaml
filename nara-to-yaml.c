@@ -12,6 +12,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
+#include <getopt.h>
 
 #include "iconv.h"
 
@@ -21,26 +22,93 @@
 
 /**/
 
-int
-main(
-    int         argc,
-    char* const argv[]
+static struct option cliOptions[] = {
+        { "help",           no_argument,            0, 'h' },
+        { "output",         required_argument,      0, 'o' },
+        { NULL, 0, 0, 0 }
+    };
+const char *cliOptionsStr = "ho:";
+
+/**/
+
+void
+usage(
+    const char      *exe
 )
 {
-    int         argi = 1;
-    int         rc = 0;
-    int         sawStdin = 0;
+    printf(
+            "usage:\n\n"
+            "    %s {options} <nara-file-1> {<nara-file-2> ..}\n\n"
+            "  options:\n\n"
+            "    -h/--help                      display this help info\n"
+            "    -o/--output <output-spec>      select the format and file(s) to which output is\n"
+            "                                   written\n"
+            "\n"
+            "    <output-spec> = <format>:<format-arguments>\n"
+            "    <format> = yaml | csv\n"
+            "    <format-arguments> =\n"
+            "        yaml:   <filename>\n"
+            "        csv:    <filename>:<filename>:<filename>\n"
+            "    <filename> = <path-to-a-file> | - (meaning stdout) | <empty> (no output)\n"
+            "    <empty> = \"\"\n"
+            "\n"
+            "    YAML outputs to a single file, whereas CSV outputs to three separate files for\n"
+            "    each record type (first is district filename, second is school filename, third\n"
+            "    is classroom file name)\n"
+            "\n"
+            "    The default output specification is \"yaml:-\" to output YAML to stdout.\n"
+            "\n",
+            exe
+        );
+}
+
+/**/
+
+int
+main(
+    int                     argc,
+    char* const             argv[]
+)
+{
+    int                     argi = 1, optc;
+    int                     rc = 0;
+    int                     sawStdin = 0;
+    
+    nara_export_context_t   exportContext = NULL;
+    const char              *outputSpec = "yaml:-";
     
     if ( argc < 2 ) {
-        printf( "usage:\n\n"
-                "    %s <nara-file-1> {<nara-file-2> ..}\n\n"
-                "      <nara-file-#> should be a path to a NARA archive or a dash (-) to read from stdin\n\n",
-                argv[0]
-            );
+        usage(argv[0]);
+        exit(EINVAL);
+    }
+    
+    while ( (optc = getopt_long(argc, argv, cliOptionsStr, cliOptions, NULL)) != -1 ) {
+        switch ( optc ) {
+        
+            case 'h':
+                usage(argv[0]);
+                exit(0);
+            
+            case 'o':
+                outputSpec = optarg;
+                break;
+        
+        }
+    }
+    argi = optind;
+    if ( argi == argc ) {
+        fprintf(stderr, "ERROR:  no NARA files provided\n");
+        usage(argv[0]);
         exit(EINVAL);
     }
     
     nara_endian_init();
+    
+    /*
+     * Initialize export context:
+     */
+    exportContext = nara_export_init(outputSpec);
+    if ( ! exportContext ) exit(EINVAL);
     
     while ( (rc == 0) && (argi < argc) ) {
         FILE    *fptr;
@@ -99,7 +167,7 @@ main(
                     
                     /* Read the record type: */
                     if ( nextRecord ) {
-                        nara_record_to_yaml(nextRecord, stdout);
+                        nara_record_export(exportContext, nextRecord);
                         nextRecord = nara_record_destroy(nextRecord);
                     } else {
                         printf("ERROR:  unable to read record\n");
@@ -122,5 +190,8 @@ main(
         }
         argi++;
     }
+    
+    nara_export_destroy(exportContext);
+    
     return rc;
 }

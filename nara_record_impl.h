@@ -53,7 +53,33 @@
 
 
 typedef nara_record_t* (*nara_record_process_fn)(nara_record_t *theRecord, iconv_t encodingConverter);
-typedef void (*nara_record_to_yaml_fn)(nara_record_t *theRecord, FILE *fptr);
+
+enum {
+    nara_export_format_yaml = 0,
+    nara_export_format_csv = 1,
+    nara_export_format_max
+};
+
+typedef struct {
+    unsigned int    format;
+} nara_export_context_base_t;
+
+typedef struct {
+    nara_export_context_base_t  base;
+    FILE                        *fptr;
+} nara_export_context_yaml_t;
+
+typedef struct {
+    nara_export_context_base_t  base;
+    FILE                        *districtFptr;
+    FILE                        *schoolFptr;
+    FILE                        *classroomFptr;
+} nara_export_context_csv_t;
+
+typedef void (*nara_export_init_fn)(nara_export_context_t exportContext);
+typedef void (*nara_record_export_fn)(nara_export_context_t exportContext, nara_record_t *theRecord);
+typedef void (*nara_export_destroy_fn)(nara_export_context_t exportContext);
+
 typedef nara_record_t* (*nara_record_destroy_fn)(nara_record_t *theRecord);
 
 #endif /* __NARA_RECORD_IMPL_H__ */

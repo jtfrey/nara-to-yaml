@@ -34,28 +34,107 @@ __nara_record_process_classroom(
 /**/
 
 void
-__nara_record_to_yaml_classroom(
-    nara_record_t       *theRecord,
-    FILE                *fptr
+__nara_export_init_classroom(
+    nara_export_context_t   exportContext
 )
 {
-    nara_classroom_t    *classroom = (nara_classroom_t*)theRecord;
-    unsigned int        i, iMax;
+    nara_export_context_base_t  *BASE_CONTEXT = (nara_export_context_base_t*)exportContext;
+    unsigned int                i;
     
-    fprintf(fptr,
-            "- recordType: classroom\n"
-            "  schoolSystemCode: %u\n"
-            "  schoolCode: %u\n"
-            "  gradeLevel: %u\n"
-            "  classroomCode: %u\n"
-            "  pupilCounts:\n",
-            classroom->schoolSystemCode,
-            classroom->schoolCode,
-            classroom->gradeLevel,
-            classroom->classroomCode
-        );
-    for ( i = 0; i < nara_ethnicity_total; i++ )
-        fprintf(fptr, "    \"%s\": %u\n", nara_ethnicity_labels[i], classroom->pupilCounts[i]);
+    switch ( BASE_CONTEXT->format ) {
+        
+        case nara_export_format_yaml: {
+            break;
+        }
+        
+        case nara_export_format_csv: {
+            nara_export_context_csv_t   *CONTEXT = (nara_export_context_csv_t*)exportContext;
+            
+            /*
+             * Write column headers to the file:
+             */
+            if ( CONTEXT->classroomFptr ) {
+                fprintf(CONTEXT->classroomFptr,
+                        "schoolSystemCode,"
+                        "schoolCode,"
+                        "gradeLevel,"
+                        "classroomCode,"
+                    );
+                for ( i = 0; i < nara_ethnicity_total - 1; i++ )
+                    fprintf(CONTEXT->classroomFptr, "pupilCounts_%s,", nara_ethnicity_labels[i]);
+                fprintf(CONTEXT->classroomFptr, "pupilCounts_%s\n", nara_ethnicity_labels[i]);
+            }
+            break;
+        }
+    }
+}
+
+/**/
+
+void
+__nara_export_destroy_classroom(
+    nara_export_context_t   exportContext
+)
+{
+}
+
+/**/
+
+void
+__nara_record_export_classroom(
+    nara_export_context_t   exportContext,
+    nara_record_t           *theRecord
+)
+{
+    nara_classroom_t            *classroom = (nara_classroom_t*)theRecord;
+    nara_export_context_base_t  *BASE_CONTEXT = (nara_export_context_base_t*)exportContext;
+    unsigned int                i;
+    
+    switch ( BASE_CONTEXT->format ) {
+        
+        case nara_export_format_yaml: {
+            nara_export_context_yaml_t  *CONTEXT = (nara_export_context_yaml_t*)exportContext;
+            
+            if ( CONTEXT->fptr ) {
+                fprintf(CONTEXT->fptr,
+                        "- recordType: classroom\n"
+                        "  schoolSystemCode: %u\n"
+                        "  schoolCode: %u\n"
+                        "  gradeLevel: %u\n"
+                        "  classroomCode: %u\n"
+                        "  pupilCounts:\n",
+                        classroom->schoolSystemCode,
+                        classroom->schoolCode,
+                        classroom->gradeLevel,
+                        classroom->classroomCode
+                    );
+                for ( i = 0; i < nara_ethnicity_total; i++ )
+                    fprintf(CONTEXT->fptr, "    \"%s\": %u\n", nara_ethnicity_labels[i], classroom->pupilCounts[i]);
+            }
+            break;
+        }
+        
+        case nara_export_format_csv: {
+            nara_export_context_csv_t   *CONTEXT = (nara_export_context_csv_t*)exportContext;
+            
+            if ( CONTEXT->classroomFptr ) {
+                fprintf(CONTEXT->classroomFptr,
+                        "%u,"
+                        "%u,"
+                        "%u,"
+                        "%u,",
+                        classroom->schoolSystemCode,
+                        classroom->schoolCode,
+                        classroom->gradeLevel,
+                        classroom->classroomCode
+                    );
+                for ( i = 0; i < nara_ethnicity_total - 1; i++ )
+                    fprintf(CONTEXT->classroomFptr, "%u,", nara_ethnicity_labels[i], classroom->pupilCounts[i]);
+                fprintf(CONTEXT->classroomFptr, "%u\n", nara_ethnicity_labels[i], classroom->pupilCounts[i]);
+            }
+            break;
+        }
+    }
 }
 
 /**/

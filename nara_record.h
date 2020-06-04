@@ -31,7 +31,13 @@ typedef struct {
 } nara_record_t;
 
 nara_record_t* nara_record_read(FILE *fptr, size_t recordSize);
-void nara_record_to_yaml(nara_record_t *theRecord, FILE *fptr);
+
+typedef const void* nara_export_context_t;
+
+nara_export_context_t nara_export_init(const char *exportArg);
+void nara_record_export(nara_export_context_t exportContext, nara_record_t *theRecord);
+void nara_export_destroy(nara_export_context_t exportContext);
+
 nara_record_t* nara_record_destroy(nara_record_t *theRecord);
 
 #endif /* __NARA_RECORD_H__ */
