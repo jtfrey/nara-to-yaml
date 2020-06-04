@@ -21,7 +21,7 @@ $ ./nara-to-yaml ~/RG441.ESS.CVRGY70
 
 ## Alternate output formats
 
-Starting in version 1.1 (tagged as **v1.1**) the program's data export was abstracted to allow the addition of other formats, notably CSV.  (This was driven primarily by the needs of the researchers who spawned this project, but even as **v1.0** was completed there was a desire to add additional export formats.)  THe program's name is still `nara-to-yaml` and the default export format is YAML, but CSV is also provided:
+Starting in version 1.1 (tagged as **v1.1**) the program's data export was abstracted to allow the addition of other formats, notably CSV.  (This was driven primarily by the needs of the researchers who spawned this project, but even as **v1.0** was completed there was a desire to add additional export formats.)  The program's name is still `nara-to-yaml` and the default export format is YAML, but CSV is also provided:
 
 ```
 $ nara-to-yaml --help
