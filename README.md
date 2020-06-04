@@ -1,8 +1,8 @@
 # nara-to-yaml
 
-A program to convert compacted NARA data archives to YAML.  The archived data includes character data in EBCDIC encoding; the text is reencoded to ASCII (in lossy fashion for out-of-scope EBCDIC code points).
+A program to convert compacted NARA data archives to YAML (and other formats in version 1.1).  The archived data includes character data in EBCDIC encoding; the text is reencoded to ASCII (in lossy fashion for out-of-scope EBCDIC code points).
 
-The program accepts one or more file paths as arguments.  Each file is read record-by-record and records are output to stdout in YAML format.  Any problems that occur should produce output on stderr.
+The program accepts one or more file paths as arguments.  Each file is read record-by-record and records are by default output to stdout in YAML format.  Any problems that occur should produce output on stderr.
 
 ```
 $ ./nara-to-yaml ~/RG441.ESS.CVRGY70
@@ -17,6 +17,50 @@ $ ./nara-to-yaml ~/RG441.ESS.CVRGY70
   systemState: "ALA"
   systemZipCode: "35010"
     :
+```
+
+## Alternate output formats
+
+Starting in version 1.1 (tagged as **v1.1**) the program's data export was abstracted to allow the addition of other formats, notably CSV.  (This was driven primarily by the needs of the researchers who spawned this project, but even as **v1.0** was completed there was a desire to add additional export formats.)  THe program's name is still `nara-to-yaml` and the default export format is YAML, but CSV is also provided:
+
+```
+$ nara-to-yaml --help
+usage:
+
+    nara-to-yaml {options} <nara-file-1> {<nara-file-2> ..}
+
+  options:
+
+    -h/--help                      display this help info
+    -o/--output <output-spec>      select the format and file(s) to which output is
+                                   written
+
+    <output-spec> = <format>:<format-arguments>
+    <format> = yaml | csv
+    <format-arguments> =
+        yaml:   <filename>
+        csv:    <filename>:<filename>:<filename>
+    <filename> = <path-to-a-file> | - (meaning stdout) | <empty> (no output)
+    <empty> = ""
+
+    YAML outputs to a single file, whereas CSV outputs to three separate files for
+    each record type (first is district filename, second is school filename, third
+    is classroom file name)
+
+    The default output specification is "yaml:-" to output YAML to stdout.
+
+```
+
+Since the three record types do not share a common set of fields, exporting to a single CSV file is not feasible.  Thus, choosing CSV output requires three separate filenames.
+
+Prior to 1972 the files did not include classroom records, so that file would be empty.  To avoid generating one of the CSV files, an empty filename can be provided:
+
+```
+$ nara-to-yaml --output=csv:district.csv:school.csv: ../RG441.ESS.CVRGY70
+$ ls -l
+total 6095
+-rw-r--r-- 1 frey everyone  2127322 Jun  4 19:11 district.csv
+-rw-r--r-- 1 frey everyone 23445958 Jun  4 19:11 school.csv
 ```
 
 ## On-disk structure
