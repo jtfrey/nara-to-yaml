@@ -26,9 +26,20 @@ enum {
     nara_record_type_max
 };
 
-typedef struct {
-    uint32_t    recordType;
-} nara_record_t;
+#ifdef NARA_1976_FORMAT
+
+    typedef struct {
+        uint32_t    systemOECode;
+        uint32_t    recordType;
+    } nara_record_t;
+
+#else
+
+    typedef struct {
+        uint32_t    recordType;
+    } nara_record_t;
+
+#endif
 
 nara_record_t* nara_record_read(FILE *fptr, size_t recordSize);
 

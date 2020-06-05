@@ -142,60 +142,60 @@ __nara_export_init_school(
                     );
                     
                 for ( i = 0; i < nara_grade_max; i++ )
-                    fprintf(CONTEXT->schoolFptr, "gradeOffered_%s,", nara_grade_labels[i]);
+                    fprintf(CONTEXT->schoolFptr, "\"gradeOffered_%s\",", nara_grade_labels[i]);
         
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->schoolFptr, "pupilCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->schoolFptr, "\"pupilCounts_%s\",", nara_ethnicity_labels[i]);
         
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->schoolFptr, "retainedCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->schoolFptr, "\"retainedCounts_%s\",", nara_ethnicity_labels[i]);
         
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->schoolFptr, "grade12Counts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->schoolFptr, "\"grade12Counts_%s\",", nara_ethnicity_labels[i]);
         
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->schoolFptr, "specialEdCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->schoolFptr, "\"specialEdCounts_%s\",", nara_ethnicity_labels[i]);
         
                 for ( j = 0; j < nara_empl_max; j++ )
                     for ( i = 0; i < nara_ethnicity_max; i++ )
-                        fprintf(CONTEXT->schoolFptr, "emplCounts_%s_%s,", nara_empl_labels[j], nara_ethnicity_labels[i]);
+                        fprintf(CONTEXT->schoolFptr, "\"emplCounts_%s_%s\",", nara_empl_labels[j], nara_ethnicity_labels[i]);
         
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->schoolFptr, "grade3Counts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->schoolFptr, "\"grade3Counts_%s\",", nara_ethnicity_labels[i]);
         
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->schoolFptr, "grade6Counts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->schoolFptr, "\"grade6Counts_%s\",", nara_ethnicity_labels[i]);
         
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->schoolFptr, "grade9Counts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->schoolFptr, "\"grade9Counts_%s\",", nara_ethnicity_labels[i]);
         
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->schoolFptr, "lowestGradePupilCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->schoolFptr, "\"lowestGradePupilCounts_%s\",", nara_ethnicity_labels[i]);
         
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->schoolFptr, "newStaffCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->schoolFptr, "\"newStaffCounts_%s\",", nara_ethnicity_labels[i]);
         
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->schoolFptr, "participantInLunchProgramCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->schoolFptr, "\"participantInLunchProgramCounts_%s\",", nara_ethnicity_labels[i]);
         
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->schoolFptr, "eligibleForLunchProgramCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->schoolFptr, "\"eligibleForLunchProgramCounts_%s\",", nara_ethnicity_labels[i]);
         
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->schoolFptr, "receivingLunchProgramCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->schoolFptr, "\"receivingLunchProgramCounts_%s\",", nara_ethnicity_labels[i]);
         
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->schoolFptr, "elementaryTeacherCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->schoolFptr, "\"elementaryTeacherCounts_%s\",", nara_ethnicity_labels[i]);
         
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->schoolFptr, "secondaryTeacherCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->schoolFptr, "\"secondaryTeacherCounts_%s\",", nara_ethnicity_labels[i]);
         
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->schoolFptr, "otherTeacherCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->schoolFptr, "\"otherTeacherCounts_%s\",", nara_ethnicity_labels[i]);
         
                 for ( i = 0; i < nara_section_distrib_max - 1; i++ )
-                    fprintf(CONTEXT->schoolFptr, "numSectionsInLowestGradeCounts_%s,", nara_section_distrib_labels[i]);
-                fprintf(CONTEXT->schoolFptr, "numSectionsInLowestGradeCounts_%s\n", nara_section_distrib_labels[i]);
+                    fprintf(CONTEXT->schoolFptr, "\"numSectionsInLowestGradeCounts_%s\",", nara_section_distrib_labels[i]);
+                fprintf(CONTEXT->schoolFptr, "\"numSectionsInLowestGradeCounts_%s\"\n", nara_section_distrib_labels[i]);
             }
             break;
         }

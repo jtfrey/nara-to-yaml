@@ -72,8 +72,8 @@ __nara_export_init_classroom(
                         "classroomCode,"
                     );
                 for ( i = 0; i < nara_ethnicity_total - 1; i++ )
-                    fprintf(CONTEXT->classroomFptr, "pupilCounts_%s,", nara_ethnicity_labels[i]);
-                fprintf(CONTEXT->classroomFptr, "pupilCounts_%s\n", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->classroomFptr, "\"pupilCounts_%s\",", nara_ethnicity_labels[i]);
+                fprintf(CONTEXT->classroomFptr, "\"pupilCounts_%s\"\n", nara_ethnicity_labels[i]);
             }
             break;
         }
@@ -140,8 +140,8 @@ __nara_record_export_classroom(
                         classroom->classroomCode
                     );
                 for ( i = 0; i < nara_ethnicity_total - 1; i++ )
-                    fprintf(CONTEXT->classroomFptr, "%u,", nara_ethnicity_labels[i], classroom->pupilCounts[i]);
-                fprintf(CONTEXT->classroomFptr, "%u\n", nara_ethnicity_labels[i], classroom->pupilCounts[i]);
+                    fprintf(CONTEXT->classroomFptr, "%u,", classroom->pupilCounts[i]);
+                fprintf(CONTEXT->classroomFptr, "%u\n", classroom->pupilCounts[i]);
             }
             break;
         }

@@ -137,35 +137,35 @@ __nara_export_init_district(
                         "samplingWeight,"
                     );
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->districtFptr, "pupilCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->districtFptr, "\"pupilCounts_%s\",", nara_ethnicity_labels[i]);
     
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->districtFptr, "expelledPupilCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->districtFptr, "\"expelledPupilCounts_%s\",", nara_ethnicity_labels[i]);
     
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->districtFptr, "systemTeacherCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->districtFptr, "\"systemTeacherCounts_%s\",", nara_ethnicity_labels[i]);
     
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->districtFptr, "professionalStaffCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->districtFptr, "\"professionalStaffCounts_%s\",", nara_ethnicity_labels[i]);
     
                 for ( i = 0; i < nara_ethnicity_max; i++ )
-                    fprintf(CONTEXT->districtFptr, "professionalsInMoreThanOneSchool_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->districtFptr, "\"professionalsInMoreThanOneSchool_%s\",", nara_ethnicity_labels[i]);
     
                 for ( i = 0; i < nara_ethnicity_total; i++ )
-                    fprintf(CONTEXT->districtFptr, "pupilsInAnotherSystemCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->districtFptr, "\"pupilsInAnotherSystemCounts_%s\",", nara_ethnicity_labels[i]);
     
                 for ( i = 0; i < nara_ethnicity_total; i++ )
-                    fprintf(CONTEXT->districtFptr, "pupilsInNonPublicSchoolsCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->districtFptr, "\"pupilsInNonPublicSchoolsCounts_%s\",", nara_ethnicity_labels[i]);
     
                 for ( i = 0; i < nara_ethnicity_total; i++ )
-                    fprintf(CONTEXT->districtFptr, "pupilsSchoolAgeNotInSchoolCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->districtFptr, "\"pupilsSchoolAgeNotInSchoolCounts_%s\",", nara_ethnicity_labels[i]);
     
                 for ( i = 0; i < nara_ethnicity_total; i++ )
-                    fprintf(CONTEXT->districtFptr, "pupilsNonResidentCounts_%s,", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->districtFptr, "\"pupilsNonResidentCounts_%s\",", nara_ethnicity_labels[i]);
     
                 for ( i = 0; i < nara_ethnicity_total - 1; i++ )
-                    fprintf(CONTEXT->districtFptr, "pupilsResidentCounts_%s,", nara_ethnicity_labels[i]);
-                fprintf(CONTEXT->districtFptr, "pupilsResidentCounts_%s\n", nara_ethnicity_labels[i]);
+                    fprintf(CONTEXT->districtFptr, "\"pupilsResidentCounts_%s\",", nara_ethnicity_labels[i]);
+                fprintf(CONTEXT->districtFptr, "\"pupilsResidentCounts_%s\"\n", nara_ethnicity_labels[i]);
             }
             break;
         }

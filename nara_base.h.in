@@ -15,6 +15,14 @@
 #include <errno.h>
 
 /*!
+    @defined NARA_1976_FORMAT
+    
+    Determines which file format -- compressed variable-sized records (1968, 70, 72) or
+    fixed-size records (1976) is used.
+*/
+#cmakedefine NARA_1976_FORMAT
+
+/*!
     @typedef nara_be_to_host_16_fn
     
     Type of a function that performs 16-bit byte-swapping
@@ -29,6 +37,14 @@ typedef uint16_t (*nara_be_to_host_16_fn)(uint16_t);
     from big-endian to the native system endian.
  */
 typedef uint32_t (*nara_be_to_host_32_fn)(uint32_t);
+
+/*!
+    @typedef nara_be_to_host_float_fn
+    
+    Type of a function that performs float byte-swapping
+    from big-endian to the native system endian.
+ */
+typedef float (*nara_be_to_host_float_fn)(float);
 
 /*!
     @function nara_endian_init
@@ -57,5 +73,14 @@ extern nara_be_to_host_16_fn    nara_be_to_host_16;
     the system's endianness.
  */
 extern nara_be_to_host_32_fn    nara_be_to_host_32;
+
+/*!
+    @function nara_be_to_host_float
+    
+    Once nara_endian_init() has been called, this function performs the
+    byte-swapping necessary to reorder a big-endian float to the
+    system's endianness.
+ */
+extern nara_be_to_host_float_fn    nara_be_to_host_float;
 
 #endif /* __NARA_BASE_H__ */

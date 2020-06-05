@@ -17,9 +17,17 @@
 #include "nara_record.h"
 #include "nara_record_impl.h"
 
-#include "nara_classroom_impl.c"
-#include "nara_school_impl.c"
-#include "nara_district_impl.c"
+#ifdef NARA_1976_FORMAT
+#   define NARA_1976_RECORD_SLOTS   872
+#   define NARA_1976_RECORD_SIZE    (sizeof(uint32_t) * NARA_1976_RECORD_SLOTS)
+#   include "1976/nara_classroom_impl.c"
+#   include "1976/nara_school_impl.c"
+#   include "1976/nara_district_impl.c"
+#else
+#   include "pre-1976/nara_classroom_impl.c"
+#   include "pre-1976/nara_school_impl.c"
+#   include "pre-1976/nara_district_impl.c"
+#endif
 
 nara_record_is_type_fn      __nara_record_is_type_fns[nara_record_type_max] = {
                                 NULL,
@@ -83,11 +91,23 @@ nara_record_read(
     size_t  recordSize
 )
 {
-    nara_record_t   *newRecord = malloc(recordSize);
+    nara_record_t   *newRecord = NULL;
+    size_t          bytesRead;
     
+    if ( feof(fptr) ) return NULL;
+    
+#ifdef NARA_1976_FORMAT
+    recordSize = NARA_1976_RECORD_SIZE;
+#endif
+    newRecord = (nara_record_t*)malloc(recordSize);
     if ( newRecord ) {
-        if ( fread(newRecord, recordSize, 1, fptr) != 1 ) {
-            fprintf(stderr, "ERROR:  unable to read full record from file (errno = %d)\n", errno);
+        bytesRead = fread(newRecord, 1, recordSize, fptr);
+        if ( bytesRead == 0 ) {
+            free((void*)newRecord);
+            newRecord = NULL;
+        }
+        else if ( bytesRead < recordSize ) {
+            fprintf(stderr, "ERROR:  unable to read full record from file at %lld (expected %lld, got %lld, errno = %d)\n", (long long int)ftell(fptr), (long long int)recordSize, (long long int)bytesRead, errno);
             free((void*)newRecord);
             newRecord = NULL;
         } else {
@@ -321,7 +341,7 @@ nara_export_destroy(
         unsigned                    i;
         
         for ( i = 1; i < nara_record_type_max; i++ )
-            if ( __nara_export_destroy_fns[i] ) __nara_export_init_fns[i](exportContext);
+            if ( __nara_export_destroy_fns[i] ) __nara_export_destroy_fns[i](exportContext);
             
         switch ( BASE_CONTEXT->format ) {
         

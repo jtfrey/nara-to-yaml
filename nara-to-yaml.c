@@ -127,6 +127,15 @@ main(
         }
         
         if ( fptr ) {
+#ifdef NARA_1976_FORMAT
+            nara_record_t       *nextRecord;
+            
+            while ( (rc == 0) && ! feof(fptr) && (nextRecord = nara_record_read(fptr, 0)) ) {
+                nara_record_export(exportContext, nextRecord);
+                nextRecord = nara_record_destroy(nextRecord);
+            }
+            if ( ! feof(fptr) ) rc = 5;
+#else
             nara_state_header_t         stateHeader;
             uint64_t                    stateRecordCount = 0, totalRecordCount = 0, nextStateRecordOffset = 0;
             size_t                      bytesRead;
@@ -185,7 +194,7 @@ main(
                     rc = 2;
                 }
             }
-            
+#endif
             if ( shouldFClose ) fclose(fptr);
         }
         argi++;
