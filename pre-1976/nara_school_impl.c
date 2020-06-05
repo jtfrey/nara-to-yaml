@@ -126,7 +126,6 @@ __nara_export_init_school(
              */
             if ( CONTEXT->schoolFptr ) {
                 fprintf(CONTEXT->schoolFptr,
-                        "recordType,"
                         "schoolSystemCode,"
                         "oeCode1970,"
                         "schoolCampusFormNumber,"
