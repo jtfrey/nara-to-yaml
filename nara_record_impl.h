@@ -28,7 +28,7 @@
  * Used to quickly turn strings in records into C strings for output.
  *
  */
-#define LOCAL_STR_FILL(N, L, P) memcpy((char*)N, (char*)P, (L)); N[(L)] = '\0'; { int N_idx = L; while ( N_idx > 0 ) { if (! isspace(N[--N_idx])) break; N[N_idx] = '\0'; } while ( N_idx >= 0 ) { if (N[N_idx] == '"') N[N_idx] = '\''; N_idx--; }}
+#define LOCAL_STR_FILL(N, L, P) memcpy((char*)N, (char*)P, (L)); N[(L)] = '\0'; { int N_idx = (L) - 1; while ( N_idx >= 0 ) { if (N[N_idx] && ! isspace(N[N_idx])) break; N[N_idx--] = '\0'; } while ( N_idx >= 0 ) { if (N[N_idx] == '"') N[N_idx] = '\''; N_idx--; }}
 
 /*
  * Generic macro used to drive the EBCDIC-to-ASCII conversion of strings inside the
@@ -51,6 +51,7 @@
         iconv(encodingConverter, NULL, NULL, NULL, NULL); \
     }
 
+typedef int (*nara_record_is_type_fn)(nara_record_t *theRecord, size_t byteSize);
 
 typedef nara_record_t* (*nara_record_process_fn)(nara_record_t *theRecord, iconv_t encodingConverter);
 

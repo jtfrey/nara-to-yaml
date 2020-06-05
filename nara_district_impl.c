@@ -35,6 +35,17 @@ typedef union {
 
 /**/
 
+int
+__nara_record_is_type_district(
+    nara_record_t*      theRecord,
+    size_t              byteSize
+)
+{
+    return ( (byteSize == 472) && (nara_be_to_host_32(theRecord->recordType) == nara_record_type_district) );
+}
+
+/**/
+
 nara_record_t*
 __nara_record_process_district(
     nara_record_t*      theRecord,
@@ -49,7 +60,7 @@ __nara_record_process_district(
     unsigned int                i, iMax;
     
     iMax = sizeof(district->compact.f1) / sizeof(uint32_t);
-    for ( i = 1; i < iMax; i ++ ) district->compact.f1[i] = nara_be_to_host_32(district->compact.f1[i]);
+    for ( i = 0; i < iMax; i ++ ) district->compact.f1[i] = nara_be_to_host_32(district->compact.f1[i]);
     
     iMax = sizeof(district->compact.f2) / sizeof(uint32_t);
     for ( i = 0; i < iMax; i ++ ) district->compact.f2[i] = nara_be_to_host_32(district->compact.f2[i]);

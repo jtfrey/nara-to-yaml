@@ -21,6 +21,12 @@
 #include "nara_school_impl.c"
 #include "nara_district_impl.c"
 
+nara_record_is_type_fn      __nara_record_is_type_fns[nara_record_type_max] = {
+                                NULL,
+                                __nara_record_is_type_district,
+                                __nara_record_is_type_school,
+                                __nara_record_is_type_classroom
+                            };
 nara_record_process_fn      __nara_record_process_fns[nara_record_type_max] = {
                                 NULL,
                                 __nara_record_process_district,
@@ -85,19 +91,18 @@ nara_record_read(
             free((void*)newRecord);
             newRecord = NULL;
         } else {
-            switch ( (newRecord->recordType = nara_be_to_host_32(newRecord->recordType)) ) {
-                case nara_record_type_district:
-                case nara_record_type_school:
-                case nara_record_type_classroom: {
-                    newRecord = __nara_record_process_fns[newRecord->recordType](newRecord, __nara_record_iconv_instance());
-                    break;
-                }
-                default: {
-                    fprintf(stderr, "ERROR:  unknown record type %d at %lld\n", newRecord->recordType, (long long int)ftell(fptr));
-                    free((void*)newRecord);
-                    newRecord = NULL;
-                    break;
-                }
+            uint32_t        recordType = 0;
+            
+            while ( recordType < nara_record_type_max ) {
+                if ( __nara_record_is_type_fns[recordType] && __nara_record_is_type_fns[recordType](newRecord, recordSize) ) break;
+                recordType++;
+            }
+            if ( recordType == nara_record_type_max ) {
+                fprintf(stderr, "ERROR:  unknown record type at %lld\n", (long long int)ftell(fptr));
+                free((void*)newRecord);
+                newRecord = NULL;
+            } else {
+                newRecord = __nara_record_process_fns[recordType](newRecord, __nara_record_iconv_instance());
             }
         }
     }

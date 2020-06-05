@@ -57,6 +57,17 @@ typedef union {
 
 /**/
 
+int
+__nara_record_is_type_school(
+    nara_record_t*      theRecord,
+    size_t              byteSize
+)
+{
+    return ( (byteSize == 716) && (nara_be_to_host_32(theRecord->recordType) == nara_record_type_school) );
+}
+
+/**/
+
 nara_record_t*
 __nara_record_process_school(
     nara_record_t*      theRecord,
@@ -71,7 +82,7 @@ __nara_record_process_school(
     unsigned int                i, iMax;
     
     iMax = sizeof(school->compact.f1) / sizeof(uint32_t);
-    for ( i = 1; i < iMax; i ++ ) school->compact.f1[i] = nara_be_to_host_32(school->compact.f1[i]);
+    for ( i = 0; i < iMax; i ++ ) school->compact.f1[i] = nara_be_to_host_32(school->compact.f1[i]);
     
     iMax = sizeof(school->compact.f2) / sizeof(uint32_t);
     for ( i = 0; i < iMax; i ++ ) school->compact.f2[i] = nara_be_to_host_32(school->compact.f2[i]);
