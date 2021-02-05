@@ -151,3 +151,10 @@ You should now have a `nara-to-yaml` executable in that `build` directory.  It c
 $ make install
 ```
 
+### Building for 1976-format
+
+By default the program is built to handle files in the the pre-1976 data format.  The program must be rebuilt to use the 1976 data format:
+
+```
+$ cmake -DCMAKE_BUILD_TYPE=Release -DNARA_1976_FORMAT=TRUE ..
+```
