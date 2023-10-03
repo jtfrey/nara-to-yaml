@@ -17,13 +17,13 @@
 #include "nara_record.h"
 #include "nara_record_impl.h"
 
-#ifdef NARA_1986_FORMAT
+#if defined(NARA_1986_FORMAT)
 #   define NARA_1986_RECORD_SLOTS   700
 #   define NARA_1986_RECORD_SIZE    (sizeof(uint32_t) * NARA_1986_RECORD_SLOTS) + 1
 #   include "1986/nara_summary_impl.c"
 #   include "1986/nara_school_impl.c"
 #   include "1986/nara_district_impl.c"
-#elifdef NARA_1976_FORMAT
+#elif defined(NARA_1976_FORMAT)
 #   define NARA_1976_RECORD_SLOTS   872
 #   define NARA_1976_RECORD_SIZE    (sizeof(uint32_t) * NARA_1976_RECORD_SLOTS)
 #   include "1976/nara_classroom_impl.c"
@@ -85,9 +85,9 @@ nara_record_read(
     
     if ( feof(fptr) ) return NULL;
 
-#ifdef NARA_1986_FORMAT
+#if defined(NARA_1986_FORMAT)
     recordSize = NARA_1986_RECORD_SIZE;
-#elifdef NARA_1976_FORMAT
+#elif defined(NARA_1976_FORMAT)
     recordSize = NARA_1976_RECORD_SIZE;
 #endif
     newRecord = (nara_record_t*)malloc(recordSize);
