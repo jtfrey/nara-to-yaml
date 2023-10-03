@@ -17,7 +17,13 @@
 #include "nara_record.h"
 #include "nara_record_impl.h"
 
-#ifdef NARA_1976_FORMAT
+#ifdef NARA_1986_FORMAT
+#   define NARA_1986_RECORD_SLOTS   700
+#   define NARA_1986_RECORD_SIZE    (sizeof(uint32_t) * NARA_1986_RECORD_SLOTS) + 1
+#   include "1986/nara_summary_impl.c"
+#   include "1986/nara_school_impl.c"
+#   include "1986/nara_district_impl.c"
+#elifdef NARA_1976_FORMAT
 #   define NARA_1976_RECORD_SLOTS   872
 #   define NARA_1976_RECORD_SIZE    (sizeof(uint32_t) * NARA_1976_RECORD_SLOTS)
 #   include "1976/nara_classroom_impl.c"
@@ -68,23 +74,6 @@ nara_record_destroy_fn      __nara_record_destroy_fns[nara_record_type_max] = {
 
 /**/
 
-iconv_t
-__nara_record_iconv_instance(void)
-{
-    static iconv_t encodingConverter = (iconv_t)-1;
-    
-    if ( encodingConverter == (iconv_t)-1 ) {
-        encodingConverter = iconv_open("ASCII//IGNORE", "EBCDIC-CP-IT");
-        if ( encodingConverter == (iconv_t)-1 ) {
-            fprintf(stderr, "ERROR:  unable to initialize iconv encoding converter (errno = %d)\n", errno);
-            exit(EINVAL);
-        }
-    }
-    return encodingConverter;
-}
-
-/**/
-
 nara_record_t*
 nara_record_read(
     FILE    *fptr,
@@ -95,8 +84,10 @@ nara_record_read(
     size_t          bytesRead;
     
     if ( feof(fptr) ) return NULL;
-    
-#ifdef NARA_1976_FORMAT
+
+#ifdef NARA_1986_FORMAT
+    recordSize = NARA_1986_RECORD_SIZE;
+#elifdef NARA_1976_FORMAT
     recordSize = NARA_1976_RECORD_SIZE;
 #endif
     newRecord = (nara_record_t*)malloc(recordSize);
@@ -122,7 +113,7 @@ nara_record_read(
                 free((void*)newRecord);
                 newRecord = NULL;
             } else {
-                newRecord = __nara_record_process_fns[recordType](newRecord, __nara_record_iconv_instance());
+                newRecord = __nara_record_process_fns[recordType](newRecord);
             }
         }
     }

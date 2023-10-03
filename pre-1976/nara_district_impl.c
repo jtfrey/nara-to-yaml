@@ -48,8 +48,7 @@ __nara_record_is_type_district(
 
 nara_record_t*
 __nara_record_process_district(
-    nara_record_t*      theRecord,
-    iconv_t             encodingConverter
+    nara_record_t*      theRecord
 )
 {
     nara_district_internal_t    *district = (nara_district_internal_t*)theRecord;
@@ -68,7 +67,6 @@ __nara_record_process_district(
     iMax = sizeof(district->compact.f3) / sizeof(uint32_t);
     for ( i = 0; i < iMax; i ++ ) district->compact.f3[i] = nara_be_to_host_32(district->compact.f3[i]);
     
-    iconv(encodingConverter, NULL, NULL, NULL, NULL);
     TRANSCODE(district, systemName, "district name");
     TRANSCODE(district, systemStreetAddr, "district street address");
     TRANSCODE(district, systemCity, "district city");

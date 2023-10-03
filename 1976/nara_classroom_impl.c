@@ -20,8 +20,7 @@ __nara_record_is_type_classroom(
 
 nara_record_t*
 __nara_record_process_classroom(
-    nara_record_t*      theRecord,
-    iconv_t             encodingConverter
+    nara_record_t*      theRecord
 )
 {
     return theRecord;
