@@ -12,13 +12,27 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+#include <ctype.h>
 #include <errno.h>
+
+/*!
+    @defined HAVE_EBCDIC_ENCODING
+
+    Determines whether or not EBCDIC transcoding to ASCII is required.
+*/
+#cmakedefine HAVE_EBCDIC_ENCODING
+
+/*!
+    @defined NARA_1986_FORMAT
+    
+    Determines if fixed-size records (1986 format) are used.
+*/
+#cmakedefine NARA_1986_FORMAT
 
 /*!
     @defined NARA_1976_FORMAT
     
-    Determines which file format -- compressed variable-sized records (1968, 70, 72) or
-    fixed-size records (1976) is used.
+    Determines if fixed-size records (1976 format) are used.
 */
 #cmakedefine NARA_1976_FORMAT
 

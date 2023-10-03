@@ -14,8 +14,6 @@
 #include <errno.h>
 #include <getopt.h>
 
-#include "iconv.h"
-
 #include "nara_state_header.h"
 #include "nara_record_header.h"
 #include "nara_record.h"
@@ -54,11 +52,16 @@ usage(
             "\n"
             "    YAML outputs to a single file, whereas CSV outputs to three separate files for\n"
             "    each record type (first is district filename, second is school filename, third\n"
-            "    is classroom file name)\n"
+            "    is %s file name)\n"
             "\n"
             "    The default output specification is \"yaml:-\" to output YAML to stdout.\n"
             "\n",
-            exe
+            exe,
+#if defined(NARA_1986_FORMAT)
+            "summary"
+#else
+            "classroom"
+#endif
         );
 }
 
@@ -127,7 +130,7 @@ main(
         }
         
         if ( fptr ) {
-#ifdef NARA_1976_FORMAT
+#if defined(NARA_1976_FORMAT) || defined(NARA_1986_FORMAT)
             nara_record_t       *nextRecord;
             
             while ( (rc == 0) && ! feof(fptr) && (nextRecord = nara_record_read(fptr, 0)) ) {

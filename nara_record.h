@@ -26,7 +26,7 @@ enum {
     nara_record_type_max
 };
 
-#ifdef NARA_1976_FORMAT
+#if defined(NARA_1976_FORMAT) || defined(NARA_1986_FORMAT)
 
     typedef struct {
         uint32_t    systemOECode;

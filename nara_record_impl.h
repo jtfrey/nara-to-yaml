@@ -8,7 +8,11 @@
 #ifndef __NARA_RECORD_IMPL_H__
 #define __NARA_RECORD_IMPL_H__
 
-#include "iconv.h"
+#include "nara_base.h"
+
+#ifdef HAVE_EBCDIC_ENCODING
+#   include "nara_ebcdic.h"
+#endif
 
 /*
  * The LOCAL_STR_DECL() macro declares a local char array with the given name (N)
@@ -34,26 +38,15 @@
  * Generic macro used to drive the EBCDIC-to-ASCII conversion of strings inside the
  * NARA records.
  */
-#define TRANSCODE(T, N, F) \
-    { \
-        fromLen = sizeof(T->break_out.N); toLen = sizeof(convBuffer); \
-        fromPtr = T->break_out.N; toPtr = convBuffer; \
-        if ( iconv(encodingConverter, &fromPtr, &fromLen, &toPtr, &toLen) < 0 ) { \
-            fprintf(stderr, "WARNING:  failed converting " F " (errno %d)\n", errno); \
-            T->break_out.N[0] = '\0'; \
-        } else { \
-            if ( 64 - toLen > sizeof(T->break_out.N) ) { \
-                fprintf(stderr, "WARNING:  converted form of " F " was longer than original field size\n"); \
-            } \
-            memset(T->break_out.N, ' ', sizeof(T->break_out.N)); \
-            memcpy(T->break_out.N, convBuffer, sizeof(T->break_out.N)); \
-        } \
-        iconv(encodingConverter, NULL, NULL, NULL, NULL); \
-    }
+#ifdef HAVE_EBCDIC_ENCODING
+#   define TRANSCODE(T, N, F) nara_ebcdic_to_ascii_inplace(T->break_out.N, 0)
+#else
+#   define TRANSCODE(T, N, F)
+#endif
 
 typedef int (*nara_record_is_type_fn)(nara_record_t *theRecord, size_t byteSize);
 
-typedef nara_record_t* (*nara_record_process_fn)(nara_record_t *theRecord, iconv_t encodingConverter);
+typedef nara_record_t* (*nara_record_process_fn)(nara_record_t *theRecord);
 
 enum {
     nara_export_format_yaml = 0,

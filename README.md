@@ -63,7 +63,11 @@ total 6095
 -rw-r--r-- 1 frey everyone 23445958 Jun  4 19:11 school.csv
 ```
 
+Later formats (e.g. 1986) did include a third record type, but it is a summary record aggregating fields of the district and school records.  The CSV `--output` argument still requires a third file for that data.
+
 ## On-disk structure
+
+### Pre-1976, raw EBCDIC binary
 
 The file format uses EBCDIC character strings of fixed length (right-padded with whitespace) and big-endian binary fields.  At the first level, the file is organized as variable-length chunks containing all records for a state:
 
@@ -151,10 +155,18 @@ You should now have a `nara-to-yaml` executable in that `build` directory.  It c
 $ make install
 ```
 
-### Building for 1976-format
+### Building for 1976 format
 
 By default the program is built to handle files in the the pre-1976 data format.  The program must be rebuilt to use the 1976 data format:
 
 ```
-$ cmake -DCMAKE_BUILD_TYPE=Release -DNARA_1976_FORMAT=TRUE ..
+$ cmake -DCMAKE_BUILD_TYPE=Release -DNARA_FORMAT=1976 ..
+```
+
+### Building for 1986 format
+
+The 1986 file present on [Harvard Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/MOHJSP&version=2.3) does **not** contain EBCDIC-encoded strings.  The program must be rebuilt to use the 1986 data format and to avoid EBCDIC-to-ASCII transcoding:
+
+```
+$ cmake -DCMAKE_BUILD_TYPE=Release -DNARA_FORMAT=1986 -DHAVE_EBCDIC_ENCODING=Off ..
 ```

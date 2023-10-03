@@ -70,8 +70,7 @@ __nara_record_is_type_school(
 
 nara_record_t*
 __nara_record_process_school(
-    nara_record_t*      theRecord,
-    iconv_t             encodingConverter
+    nara_record_t*      theRecord
 )
 {
     nara_school_internal_t      *school = (nara_school_internal_t*)theRecord;
@@ -93,7 +92,6 @@ __nara_record_process_school(
     iMax = sizeof(school->compact.f4) / sizeof(uint32_t);
     for ( i = 0; i < iMax; i ++ ) school->compact.f4[i] = nara_be_to_host_32(school->compact.f4[i]);
     
-    iconv(encodingConverter, NULL, NULL, NULL, NULL);
     TRANSCODE(school, schoolName, "school name");
     TRANSCODE(school, schoolStreetAddr, "school street address");
     TRANSCODE(school, schoolCity, "school city");

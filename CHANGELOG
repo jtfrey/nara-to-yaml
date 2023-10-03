@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2023-10-03
+### Fixed
+- CMakeLists.txt had inclusion of iconv header flags mismatched with the test for their presence
+### Added
+- 1986 binary file format implementation
+- Added EBCDIC-US to UCS4 conversion table and functions to this project
+- Made EBCDIC conversion optional since files on [Harvard Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/MOHJSP&version=2.3) have been converted to ASCII
+### Removed
+- Removed dependency on iconv for EBCDIC-to-ASCII transcoding
+  - Only iconv embedded in glibc has EBCDIC encodings, the source library has never included EBCDIC support!
+
 ## [1.2.0] - 2020-06-05
 ### Added
 - Code to handle 1976 data format (fixed size, non-compressed)
